@@ -18,7 +18,7 @@ public class DateEventCollector {
 	public DateEventCollector(String groupByDateFormat) {
 		this.groupByDateFormat = groupByDateFormat;
 		this.df = new SimpleDateFormat(this.groupByDateFormat);
-		this.dateCountMap = new TreeMap<>(new Comparator<String>() {
+		this.dateCountMap = new TreeMap(new Comparator<String>() {
 			@Override
 			public int compare(String o1, String o2) {
 				try {					

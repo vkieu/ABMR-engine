@@ -5,6 +5,8 @@ import java.io.IOException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 
+import com.smartfocus.report.BehaviourReport;
+
 public class HbaseScan {
 
 	private Configuration conf;
@@ -29,7 +31,7 @@ public class HbaseScan {
 
 	private void run() throws IOException {
 		
-		new BehaviourImpl().setConf(conf).run();
+		new BehaviourReport().setConf(conf).run();
 		
 	}
 

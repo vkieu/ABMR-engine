@@ -1,6 +1,9 @@
 package com.smartfocus.demo;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ConsoleProgressBar {
 	
@@ -16,27 +19,35 @@ public class ConsoleProgressBar {
 	private String message = "";
 	private long status = 0;
 	
-	private static final int REFRESH_PERIOD = 100;
-	private static long lastPrinted = 0;
+	private final int refreshInterval;
+	private long lastPrinted = 0;
 	private int statusRoller = 0;
+	private long started = 0;
+	private final  DateFormat df;
 	
-	public ConsoleProgressBar (String message) {
-		this.message = message;
+	public ConsoleProgressBar (int refreshInterval) {
+		df = new SimpleDateFormat("HH:mm:ss");
+		this.refreshInterval = refreshInterval;
+		this.started = System.currentTimeMillis();
 	}
 	
 	public void setMessage(String message) {
 		this.message = message;
-		output();
+		System.out.println(this.message);
 	}
 	
-	public void setStatus(long status) {
+	public void setStatus(long status, String message) {
 		this.status = status;
-		output();
+		this.message = message;
+		printProgress();
 	}
-	public void output() {
-		if(System.currentTimeMillis() - lastPrinted > REFRESH_PERIOD) {
+	
+	private void printProgress() {
+		if(System.currentTimeMillis() - lastPrinted > refreshInterval) {
 			String anim= "|/-\\";
-			String data = "\r" + anim.charAt(statusRoller++ % anim.length())  + " " + status + " " + message ;
+			String data = "\r" + anim.charAt(statusRoller++ % anim.length())  
+					+ " elasped: "+ (df.format(new Date(System.currentTimeMillis() - started))) 
+					+ " " + message ;
 	        try {
 				System.out.write(data.getBytes());
 				lastPrinted = System.currentTimeMillis();

@@ -10,31 +10,37 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 
-import com.smartfocus.demo.BehaviourImpl;
-
 @ComponentScan("com.smartfocus.demo")
 @PropertySource(value="file:global.properties")
 @SpringBootApplication
 public class ABMReport {
 
 	@Value("${hbase.host.url:localhost}")
-	private String hbaseHostUrl;	
-	@Value("${hbase.zookeeper.host:localhost}")	
-	private String zookeeperHost;	
+	private String hbaseHostUrl;
+	@Value("${hbase.zookeeper.quorumPeer:localhost}")
+	private String zookeeperQuorumPeer;
 	@Value("${hbase.zookeeper.port:2181}")
 	private int zookeeperPort;	
 	@Value("${hbase.connection.timeout:12000}")
 	private int timeout;
 	
+	@Value("${report.multi.paid.search:false}")
+	private boolean reportPaidSearch;
+	
+	@Value("${report.single.paid.search:false}")
+	private boolean reportSinglePaidSearch;
+	
 	@Autowired
-	private BehaviourImpl behaviourImpl;
+	private BehaviourReport behaviourReport;
+	@Autowired
+	private BehaviourPaidReport behaviourPaidReport;
 	
 	private Configuration getHBaseConf() {
 		Configuration conf = HBaseConfiguration.create();				
 		conf.setInt("timeout", timeout);
 		conf.set("hbase.master", hbaseHostUrl);
-		conf.set("hbase.zookeeper.quorum", zookeeperHost);
-		conf.setInt("hbase.zookeeper.property.clientPort", zookeeperPort);			
+		conf.set("hbase.zookeeper.quorum", zookeeperQuorumPeer);
+		conf.setInt("hbase.zookeeper.property.clientPort", zookeeperPort);
 		return conf;
 	}
 		
@@ -45,8 +51,17 @@ public class ABMReport {
 		
 		Configuration conf = report.getHBaseConf();		
 		System.out.println("hbase configuration: " + conf);
-		report.behaviourImpl.setConf(conf);
-		report.behaviourImpl.run();
+		
+		if(report.reportPaidSearch) {
+			report.behaviourPaidReport.setConf(conf);
+			report.behaviourPaidReport.run();
+		}
+		
+		if(report.reportSinglePaidSearch) {
+			report.behaviourReport.setConf(conf);
+			report.behaviourReport.run();
+		}
+				
 		
 	}
 
