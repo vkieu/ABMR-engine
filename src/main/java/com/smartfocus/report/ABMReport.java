@@ -10,7 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
 
-@ComponentScan("com.smartfocus.demo")
+@ComponentScan("com.smartfocus.report")
 @PropertySource(value="file:global.properties")
 @SpringBootApplication
 public class ABMReport {
