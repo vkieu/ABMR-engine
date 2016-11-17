@@ -24,7 +24,7 @@ public class BehaviourReport extends ParentHBaseDAO {
 	
 	@Value("${hbase.database:IPS3StandAlone}")
 	private String database;
-	@Value("${report.group.by.date.format:'MMM/yyyy'}")
+	@Value("${paid.search.group.by.date.format:'MMM/yyyy'}")
 	private String groupByDateFormat;
 	
 	//private static final String INDEX_TABLE = ENV +  "BehaviourIndexes";
@@ -47,10 +47,10 @@ public class BehaviourReport extends ParentHBaseDAO {
 		
 	private Configuration conf;
 	
-	@Value("${participant.account.ids}")
+	@Value("${paid.search.ids}")
 	private String participantAccountIDs;
 	
-	@Value("${regex.behaviour.type.filter:'offer-open'}")
+	@Value("${paid.search.regex.behaviour.type.filter:'offer-open'}")
 	private String regexBehaviourTypeFilter;
 	
 	@Value("${progress.bar.enabled: true}")

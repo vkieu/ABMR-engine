@@ -24,16 +24,22 @@ public class ABMReport {
 	@Value("${hbase.connection.timeout:12000}")
 	private int timeout;
 	
-	@Value("${report.multi.paid.search:false}")
-	private boolean reportPaidSearch;
+	@Value("${report.records.count:false}")
+	private boolean countReport;
 	
-	@Value("${report.single.paid.search:false}")
-	private boolean reportSinglePaidSearch;
+	@Value("${report.paid.search:false}")
+	private boolean paidSearch;
+	
+	@Value("${report.paid.json.export:false}")
+	private boolean jsonCsvExport;	
 	
 	@Autowired
 	private BehaviourReport behaviourReport;
 	@Autowired
 	private BehaviourPaidReport behaviourPaidReport;
+	@Autowired
+	private BehaviourJsonReport behaviourJsonReport;
+	
 	
 	private Configuration getHBaseConf() {
 		Configuration conf = HBaseConfiguration.create();				
@@ -52,16 +58,20 @@ public class ABMReport {
 		Configuration conf = report.getHBaseConf();		
 		System.out.println("hbase configuration: " + conf);
 		
-		if(report.reportPaidSearch) {
+		if(report.countReport) {
 			report.behaviourPaidReport.setConf(conf);
 			report.behaviourPaidReport.run();
 		}
 		
-		if(report.reportSinglePaidSearch) {
+		if(report.paidSearch) {
 			report.behaviourReport.setConf(conf);
 			report.behaviourReport.run();
 		}
-				
+		
+		if (report.jsonCsvExport) {
+			report.behaviourJsonReport.setConf(conf);
+			report.behaviourJsonReport.run();
+		}
 		
 	}
 
